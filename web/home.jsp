@@ -73,7 +73,7 @@
     <div class="prod-cont">
         <c:forEach items="${newsProductList}" var="product">
             <div class="prod">
-                <img src="${product.thumbnail}" alt="">
+                <a href="ProductServlet?productId=${product.id}"><img src="${product.thumbnail}" alt=""></a>
                 <div class="des">
                     <span>adidas</span>
                     <h5>${product.name}</h5>

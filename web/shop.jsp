@@ -41,20 +41,20 @@
     <div class="prod-cont">
         <c:forEach items="${productList}" var="product">
             <div class="prod">
-                <img src="${product.thumbnail}" alt="">
-                    <div class="des">
-                        <span>adidas</span>
-                        <h5>${product.name}</h5>
-                        <div class="star">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <h4>$${product.price}</h4>
+                <a href="ProductServlet?productId=${product.id}"><img src="${product.thumbnail}" alt=""></a>
+                <div class="des">
+                    <span>adidas</span>
+                    <h5>${product.name}</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
                     </div>
-                    <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
+                    <h4>$${product.price}</h4>
+                </div>
+                <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
             </div>
         </c:forEach>
     </div>
