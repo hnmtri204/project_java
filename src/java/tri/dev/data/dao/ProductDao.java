@@ -33,9 +33,12 @@ public interface ProductDao {
     public List<Product> getProducts(int from, int amount);
 
     public boolean updateView(Product product);
-    
+
+    List<Product> filterProducts(String property, String order, int offset, int limit);
+
     List<Product> findByCategory(int categoryId, int page, int pageSize);
+
     int countByCategory(int categoryId);
-    
+
     int countAll();
 }

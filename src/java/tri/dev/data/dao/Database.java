@@ -37,5 +37,4 @@ public class Database extends DatabaseDao {
         // TODO Auto-generated method stub
         return new UserImpl();
     }
-
 }

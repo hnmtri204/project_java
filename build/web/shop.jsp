@@ -20,6 +20,23 @@
     </div>
 </section>
 
+<section id="filter" class="section-p1">
+    <form action="ShopServlet" method="get" class="filter">
+        <strong>Sort by:</strong>
+        <select name="property" class="form-control property">
+            <option value="name">Name</option>
+            <option value="price">Price</option>
+            <option value="createdAt">Time</option>
+        </select>
+        <strong>Order by:</strong>
+        <select name="order" class="form-control order">
+            <option value="asc">A-Z</option>
+            <option value="desc">Z-A</option>
+        </select>
+        <button type="submit" class="filter-submit btn btn-primary">Filter</button>
+    </form>
+</section>
+
 <section id="product1" class="section-p1">
     <div class="prod-cont">
         <c:forEach items="${productList}" var="product">

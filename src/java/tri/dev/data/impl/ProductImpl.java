@@ -448,4 +448,33 @@ public class ProductImpl implements ProductDao {
         }
         return count;
     }
+
+    @Override
+    public List<Product> filterProducts(String property, String order, int offset, int limit) {
+        List<Product> filteredProducts = new ArrayList<>();
+        String query = "SELECT * FROM PRODUCTS ORDER BY " + property + " " + order + " LIMIT ? OFFSET ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setInt(1, limit);
+            stmt.setInt(2, offset);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                String thumbnail = rs.getString("thumbnail");
+                double price = rs.getDouble("price");
+                int quantity = rs.getInt("quantity");
+                int view = rs.getInt("view");
+                int categoryId = rs.getInt("category_id");
+                Timestamp createdAt = rs.getTimestamp("created_at");
+
+                filteredProducts.add(new Product(id, name, description, thumbnail, price, quantity, view, categoryId, createdAt));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return filteredProducts;
+    }
 }
