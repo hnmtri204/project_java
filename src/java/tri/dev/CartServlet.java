@@ -13,6 +13,9 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import tri.dev.data.dao.CategoryDao;
+import tri.dev.data.dao.DatabaseDao;
+import tri.dev.data.model.Category;
 
 /**
  *
@@ -25,12 +28,17 @@ public class CartServlet extends BaseServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         List<OrderItem> cart = (List<OrderItem>) session.getAttribute("cart");
-        if(cart == null){
+        if (cart == null) {
             cart = new ArrayList<OrderItem>();
         }
-        
+
+        // Lấy danh mục
+        CategoryDao categoryDao = DatabaseDao.getInstance().getCategoryDao();
+        List<Category> categoryList = categoryDao.findAll();
+
         request.setAttribute("cart", cart);
         request.setAttribute("total", Helper.total(cart));
+        request.setAttribute("categoryList", categoryList); // Thêm danh mục vào request
         request.getRequestDispatcher("cart.jsp").include(request, response);
     }
 
@@ -51,7 +59,7 @@ public class CartServlet extends BaseServlet {
             default:
                 throw new AssertionError();
         }
-        
+
         response.sendRedirect("CartServlet");
     }
 
@@ -59,27 +67,27 @@ public class CartServlet extends BaseServlet {
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         int productId = Integer.parseInt(request.getParameter("productId"));
         double price = Double.parseDouble(request.getParameter("price"));
-        
+
         OrderItem orderItem = new OrderItem(quantity, price, 0, productId);
-        
+
         HttpSession session = request.getSession();
         List<OrderItem> cart = (List<OrderItem>) session.getAttribute("cart");
-        
+
         boolean isExistInCart = false;
-        
-        if(cart == null){
+
+        if (cart == null) {
             cart = new ArrayList<>();
-        }else{
-            for(OrderItem ord : cart){
-                if(ord.getProductId() == productId){
+        } else {
+            for (OrderItem ord : cart) {
+                if (ord.getProductId() == productId) {
                     ord.setQuantity(ord.getQuantity() + quantity);
                     isExistInCart = true;
                     break;
                 }
             }
         }
-        
-        if(!isExistInCart){
+
+        if (!isExistInCart) {
             cart.add(orderItem);
         }
         session.setAttribute("cart", cart);
@@ -91,14 +99,14 @@ public class CartServlet extends BaseServlet {
         HttpSession session = request.getSession();
         List<OrderItem> cart = (List<OrderItem>) session.getAttribute("cart");
 
-        if(cart != null && cart.isEmpty() == false){
-            for(OrderItem ord : cart){
-                if(ord.getProductId() == productId){
+        if (cart != null && cart.isEmpty() == false) {
+            for (OrderItem ord : cart) {
+                if (ord.getProductId() == productId) {
                     ord.setQuantity(quantity);
                 }
             }
         }
-        
+
         session.setAttribute("cart", cart);
     }
 
@@ -106,16 +114,16 @@ public class CartServlet extends BaseServlet {
         int productId = Integer.parseInt(request.getParameter("productId"));
         HttpSession session = request.getSession();
         List<OrderItem> cart = (List<OrderItem>) session.getAttribute("cart");
-        
-        if(cart != null){
+
+        if (cart != null) {
             for (int i = 0; i < cart.size(); i++) {
                 OrderItem ord = cart.get(i);
-                if(ord.getProductId() == productId){
+                if (ord.getProductId() == productId) {
                     cart.remove(ord);
                 }
             }
         }
-        
+
         session.setAttribute("cart", cart);
     }
 

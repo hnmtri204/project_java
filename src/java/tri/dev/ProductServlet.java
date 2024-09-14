@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import tri.dev.data.dao.CategoryDao;
+import tri.dev.data.model.Category;
 
 /**
  *
@@ -27,10 +29,15 @@ public class ProductServlet extends BaseServlet {
         ProductDao productDao = DatabaseDao.getInstance().getProductDao();
         Product product = productDao.find(productId);
         List<Product> newsProductList = productDao.news(Constants.NUMBER_LIMIT);
-        
+
+        // Lấy danh mục
+        CategoryDao categoryDao = DatabaseDao.getInstance().getCategoryDao();
+        List<Category> categoryList = categoryDao.findAll();
+
         request.setAttribute("newsProductList", newsProductList);
-        
         request.setAttribute("product", product);
+        request.setAttribute("categoryList", categoryList); // Thêm danh mục vào request
+
         request.getRequestDispatcher("product.jsp").include(request, response);
     }
 

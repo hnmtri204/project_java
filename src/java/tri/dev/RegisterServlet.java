@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
+import tri.dev.data.dao.CategoryDao;
+import tri.dev.data.model.Category;
 
 /**
  *
@@ -22,6 +25,11 @@ public class RegisterServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Lấy danh mục
+        CategoryDao categoryDao = DatabaseDao.getInstance().getCategoryDao();
+        List<Category> categoryList = categoryDao.findAll();
+
+        request.setAttribute("categoryList", categoryList); // Thêm danh mục vào request
         request.getRequestDispatcher("register.jsp").include(request, response);
     }
 
@@ -29,18 +37,18 @@ public class RegisterServlet extends BaseServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        
+
         UserDAO userDao = DatabaseDao.getInstance().getUserDao();
         User user = userDao.find(email);
-        
-        if(user != null){
+
+        if (user != null) {
             session.setAttribute("error", "Email existed");
             request.getRequestDispatcher("register.jsp").forward(request, response);
-        }else{
-            user = new User(email,password, "user");
+        } else {
+            user = new User(email, password, "user");
             userDao.insert(user);
             response.sendRedirect("LoginServlet");
         }
